@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/db/generated/client"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id        String   @id @default(cuid())
+  telegramId String  @map("telegram_id") 
+  blockChain String
+  walletAddresses String[] @map("wallet_addresses")
+  name      String?
+  password  String
+  config    Json
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+
+
+model assets{
+  id        String   @id @default(cuid())
+  name      String
+  assetId  String   @map("asset_id")
+  metadata  Json
+  collectionName String @map("collection_name")
+  type      String
+  blockchain String
+  symbol    String
+  price     Float
+  unisatMarketPrice Float @map("unisat_market_price")
+  unisatMarketData Json @map("unisat_market_data")
+  magicedenMarketPrice Float @map("magiceden_market_price")
+  magicedenMarketData Json @map("magiceden_market_data")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model users_assets{
+  userId String @map("user_id")
+  assetId String @map("asset_id")
+  walletAddress String @map("wallet_address")
+  balance Float @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@id([userId, assetId, walletAddress])
+}

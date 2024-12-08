@@ -1,0 +1,9 @@
+/*
+  Warnings:
+
+  - Added the required column `wallet_address` to the `users_assets` table without a default value. This is not possible if the table is not empty.
+
+*/
+-- AlterTable
+ALTER TABLE "users_assets" ADD COLUMN     "wallet_address" TEXT NOT NULL;
+
